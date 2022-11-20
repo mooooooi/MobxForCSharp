@@ -2,7 +2,7 @@
 
 namespace Higo.Mobx
 {
-    public class ObservableObject : IObservable, IObservableForStore
+    public abstract class ObservableObject : IObservable, IObservableForStore
     {
         internal Store m_store;
         internal ParentInfo m_parentInfo;
@@ -10,11 +10,13 @@ namespace Higo.Mobx
         internal int m_fieldCount;
         public bool IsInitialized => m_store != null;
 
+        protected abstract void OnBind();
         void IObservableForStore.init(Store store, in ParentInfo parentInfo)
         {
             m_store = store;
             m_parentInfo = parentInfo;
             m_objectId = store.getObjectId();
+            OnBind();
         }
 
         protected void Bind<T>(ref T observable) where T : IObservableForStore

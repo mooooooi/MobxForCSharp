@@ -17,9 +17,8 @@ public class PersonBaseInfo : ObservableObject
         get => m_name.Value;
     }
 
-    public PersonBaseInfo(Store store)
+    protected override void OnBind()
     {
-        store.Bind(this);
         Bind(ref m_id);
         Bind(ref m_name);
     }
@@ -34,10 +33,10 @@ public class PersonAgeInfo : ObservableObject
         get => m_age.Value;
     }
 
-    public PersonAgeInfo(Store store)
+    protected override void OnBind()
     {
-        store.Bind(this);
         Bind(ref m_age);
+
     }
 }
 
@@ -47,7 +46,8 @@ public static class NormalTest
     public static void Single()
     {
         var store = new Store();
-        var baseInfo = new PersonBaseInfo(store);
+        var baseInfo = new PersonBaseInfo();
+        store.Bind(baseInfo);
 
         var testNum = 0;
 
@@ -88,8 +88,11 @@ public static class NormalTest
     public static void Multiple()
     {
         var store = new Store();
-        var baseInfo = new PersonBaseInfo(store);
-        var ageInfo = new PersonAgeInfo(store);
+        var baseInfo = new PersonBaseInfo();
+        var ageInfo = new PersonAgeInfo();
+
+        store.Bind(baseInfo);
+        store.Bind(ageInfo);
 
         var testNum = 0;
 
