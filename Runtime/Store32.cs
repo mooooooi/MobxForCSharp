@@ -4,7 +4,7 @@ using System.Collections.Specialized;
 
 namespace Higo.Mobx
 {
-    public class Store
+    public class Store32 : IStore
     {
         internal List<BitVector32> m_getterDeps = new List<BitVector32>();
         internal List<BitVector32> m_setterDeps = new List<BitVector32>();
@@ -67,7 +67,7 @@ namespace Higo.Mobx
             m_getterFlag = previousGetterFlag;
         }
 
-        public ActionScope CreateActionScope() => new ActionScope(this);
+        public IDisposable CreateActionScope() => new ActionScope32(this);
 
         public void Bind<T>(in T observable) where T : IObservableForStore
         {
@@ -91,7 +91,7 @@ namespace Higo.Mobx
         public static TObservable AsRoot<TObservable>()
             where TObservable : ObservableObject, IObservableForStore, new()
         {
-            var store = new Store();
+            var store = new Store32();
             var observable = new TObservable();
             store.Bind(observable);
             return observable;

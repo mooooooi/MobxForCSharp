@@ -18,7 +18,7 @@ namespace Higo.Mobx
 
     public interface IObservableForStore
     {
-        internal void init(Store store, in ParentInfo parentInfo);
+        internal void init(IStore store, in ParentInfo parentInfo);
     }
 
     public interface IObservable

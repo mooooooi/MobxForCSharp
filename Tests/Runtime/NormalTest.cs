@@ -48,7 +48,7 @@ public static class NormalTest
     [Test]
     public static void Single()
     {
-        var baseInfo = Store.AsRoot<PersonBaseInfo>();
+        var baseInfo = Store32.AsRoot<PersonBaseInfo>();
 
         var testNum = 0;
 
@@ -88,8 +88,8 @@ public static class NormalTest
     [Test]
     public static void Multiple()
     {
-        var store = new Store();
-        var info = Store.AsRoot<PersonInfo>();
+        var store = new Store32();
+        var info = Store32.AsRoot<PersonInfo>();
 
         var testNum = 0;
 
@@ -130,7 +130,7 @@ public static class NormalTest
     [Test]
     public static void Ext()
     {
-        var baseInfo = Store.AsRoot<PersonBaseInfo>();
+        var baseInfo = Store32.AsRoot<PersonBaseInfo>();
 
         var testNum = 0;
         baseInfo.AutoRun(b =>

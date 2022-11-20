@@ -4,14 +4,14 @@ namespace Higo.Mobx
 {
     public abstract class ObservableObject : IObservable, IObservableForStore
     {
-        internal Store m_store;
+        internal IStore m_store;
         internal ParentInfo m_parentInfo;
         internal int m_objectId;
         internal int m_fieldCount;
         public bool IsInitialized => m_store != null;
 
         protected abstract void OnBind();
-        void IObservableForStore.init(Store store, in ParentInfo parentInfo)
+        void IObservableForStore.init(IStore store, in ParentInfo parentInfo)
         {
             m_store = store;
             m_parentInfo = parentInfo;
@@ -43,7 +43,7 @@ namespace Higo.Mobx
             observable.init(m_store, in parentInfo);
         }
 
-        public ActionScope CreateActionScope() => new ActionScope(m_store);
+        public IDisposable CreateActionScope() => m_store.CreateActionScope();
     }
 
     public static class ObservableObjectExt

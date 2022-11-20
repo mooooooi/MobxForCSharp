@@ -3,11 +3,11 @@ using System.Collections.Specialized;
 
 namespace Higo.Mobx
 {
-    public struct ActionScope : IDisposable
+    public struct ActionScope32 : IDisposable
     {
-        private Store m_store;
+        private Store32 m_store;
         private BitVector32 m_previousSetterFlag;
-        public ActionScope(Store store)
+        public ActionScope32(Store32 store)
         {
             m_store = store;
             m_previousSetterFlag = store.m_setterFlag;

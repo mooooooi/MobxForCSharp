@@ -2,7 +2,7 @@
 {
     public struct ObservableValue<T> : IObservable, IObservableForStore
     {
-        internal Store m_store;
+        internal IStore m_store;
         internal ParentInfo m_parentInfo;
         internal T m_value;
         public T Value
@@ -13,7 +13,7 @@
 
         public bool IsInitialized => m_store != null;
 
-        void IObservableForStore.init(Store store, in ParentInfo parentInfo)
+        void IObservableForStore.init(IStore store, in ParentInfo parentInfo)
         {
             m_store = store;
             m_parentInfo = parentInfo;
