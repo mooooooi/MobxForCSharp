@@ -37,25 +37,21 @@ public class Data : ObservableObject
 
 **Use**
 ```cs
-var data = new Data();
-// 1. New store.
-var store = new Store();
-// 2. Bind the object.
-store.Bind(data);
+var data = Store.AsRoot<Data>();
 
-store.AutoRun(() => 
+data.AutoRun(() => 
 {
     Console.WriteLine($"Data's reaction: Id({data.Id})");
 });
 // Console: Data's reaction: Id(0)
 
-using(store.CreateActionScope())
+using(data.CreateActionScope())
 {
     data.Id = 2;
 }
 // Console: Data's reaction: Id(2)
 
-using(store.CreateActionScope())
+using(data.CreateActionScope())
 {
     data.Name = "Changing!";
 }
