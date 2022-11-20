@@ -30,7 +30,7 @@ namespace Higo.Mobx
             observable.init(m_store, in parentInfo);
         }
 
-        protected void BindObject<T>(ref T observable) where T : ObservableObject, IObservableForStore, new()
+        protected void BindObject<T>(ref T observable) where T : IObservableForStore, new()
         {
             if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
             if (observable == null)
@@ -43,7 +43,7 @@ namespace Higo.Mobx
             observable.init(m_store, in parentInfo);
         }
 
-        public ActionScope CreateActionScope() => m_store.CreateActionScope();
+        public ActionScope CreateActionScope() => new ActionScope(m_store);
     }
 
     public static class ObservableObjectExt
