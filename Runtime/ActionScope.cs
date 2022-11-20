@@ -19,13 +19,13 @@ namespace Higo.Mobx
             var flag = m_store.m_setterFlag;
             foreach (var (k, v) in m_store.m_reactions)
             {
-                if ((k.Data & flag.Data) != k.Data) continue;
+                if ((k.Data & flag.Data) != flag.Data) continue;
                 foreach (var info in v)
                 {
                     var fail = false;
                     foreach (var c in info.Condition)
                     {
-                        if ((m_store.m_setterDeps[c.index].Data & c.deps.Data) != c.deps.Data)
+                        if ((c.deps.Data & m_store.m_setterDeps[c.index].Data) != m_store.m_setterDeps[c.index].Data)
                         {
                             fail = true;
                             break;

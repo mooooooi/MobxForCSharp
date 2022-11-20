@@ -1,5 +1,5 @@
 {
-    "name": "com.higo.mobx-for-csharp",
+    "name": "com.higo.mobx",
     "version": "0.0.1",
     "displayName": "Mobx for CSharp",
     "description": "Simple, scalable state management.",
