@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Codice.CM.Common.Merge;
+using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
@@ -14,9 +15,8 @@ namespace Higo.Mobx
         internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new Dictionary<BitVector32, List<ReactionInfo>>();
         internal int m_fieldCount;
 
-        public ref T GetValue<T>(ref ObservableValue<T> observable, ref T field)
+        public ref T GetValue<T>(in ParentInfo parentInfo, ref T field)
         {
-            ref var parentInfo = ref observable.m_parentInfo;
             var dep = m_getterFlag[1 << parentInfo.ObjectId]
                 ? m_getterDeps[parentInfo.ObjectId] : default;
             m_getterFlag[1 << parentInfo.ObjectId] = true;
@@ -26,9 +26,8 @@ namespace Higo.Mobx
             return ref field;
         }
 
-        public void SetValue<T>(ref ObservableValue<T> observable, ref T field, in T newValue)
+        public void SetValue<T>(in ParentInfo parentInfo, ref T field, in T newValue)
         {
-            ref var parentInfo = ref observable.m_parentInfo;
             var dep = m_setterFlag[1 << parentInfo.ObjectId]
                 ? m_setterDeps[parentInfo.ObjectId]
                 : default;
@@ -37,6 +36,22 @@ namespace Higo.Mobx
             m_setterDeps[parentInfo.ObjectId] = dep;
 
             field = newValue;
+        }
+
+        public void CombineSetterFlag(int objectId, int flag)
+        {
+            var dep = m_setterFlag[1 << objectId]
+                ? m_setterDeps[objectId] : default;
+            m_setterDeps[objectId] = new BitVector32(dep.Data | flag);
+            m_setterFlag[1 << objectId] = true;
+        }
+
+        public void CombineGetterFlag(int objectId, int flag)
+        {
+            var dep = m_getterFlag[1 << objectId]
+                ? m_getterDeps[objectId] : default;
+            m_getterDeps[objectId] = new BitVector32(dep.Data | flag);
+            m_getterFlag[1 << objectId] = true;
         }
 
         public void AutoRun(Action onReaction)
@@ -89,7 +104,7 @@ namespace Higo.Mobx
         }
 
         public static TObservable AsRoot<TObservable>()
-            where TObservable : ObservableObject, IObservableForStore, new()
+            where TObservable : IObservableForStore, new()
         {
             var store = new Store32();
             var observable = new TObservable();

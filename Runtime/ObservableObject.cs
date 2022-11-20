@@ -58,5 +58,16 @@ namespace Higo.Mobx
         {
             observable.m_store.AutoRun(reaction);
         }
+
+        public static void AutoRun<T, TObservable>(this TObservable observable, Action<TObservable> reaction)
+            where TObservable : ObservableList<T>
+        {
+            observable.m_store.AutoRun(() => reaction(observable));
+        }
+
+        public static void AutoRun<T>(this ObservableList<T> observable, Action reaction)
+        {
+            observable.m_store.AutoRun(reaction);
+        }
     }
 }

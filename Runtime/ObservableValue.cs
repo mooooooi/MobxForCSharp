@@ -7,8 +7,8 @@
         internal T m_value;
         public T Value
         {
-            get => m_store.GetValue(ref this, ref m_value);
-            set => m_store.SetValue(ref this, ref m_value, in value);
+            get => m_store.GetValue(in m_parentInfo, ref m_value);
+            set => m_store.SetValue(in m_parentInfo, ref m_value, in value);
         }
 
         public bool IsInitialized => m_store != null;
