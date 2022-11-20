@@ -1,0 +1,19 @@
+{
+    "name": "com.higo.mobx-for-csharp",
+    "version": "0.0.1",
+    "displayName": "Mobx for CSharp",
+    "description": "Simple, scalable state management.",
+    "unity": "2021.1",
+    "dependencies": {
+    },
+    "keywords": [
+        "mobx",
+        "state-management",
+        "data-driven"
+    ],
+    "author": {
+        "name": "mooooooi",
+        "email": "emwings@outlook.com",
+        "url": "https://wing.atatakai.cn"
+    }
+}
