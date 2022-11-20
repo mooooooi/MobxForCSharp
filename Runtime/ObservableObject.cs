@@ -15,11 +15,11 @@ namespace Higo.Mobx
         {
             m_store = store;
             m_parentInfo = parentInfo;
-            m_objectId = store.getObjectId();
+            m_objectId = store.GetObjectId();
             OnBind();
         }
 
-        protected void Bind<T>(ref T observable) where T : IObservableForStore
+        protected void BindValue<T>(ref T observable) where T : struct, IObservableForStore
         {
             if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
             var parentInfo = new ParentInfo()
@@ -28,6 +28,35 @@ namespace Higo.Mobx
                 FieldId = m_fieldCount++,
             };
             observable.init(m_store, in parentInfo);
+        }
+
+        protected void BindObject<T>(ref T observable) where T : ObservableObject, IObservableForStore, new()
+        {
+            if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
+            if (observable == null)
+                observable = new T();
+            var parentInfo = new ParentInfo()
+            {
+                ObjectId = m_objectId,
+                FieldId = m_fieldCount++,
+            };
+            observable.init(m_store, in parentInfo);
+        }
+
+        public ActionScope CreateActionScope() => m_store.CreateActionScope();
+    }
+
+    public static class ObservableObjectExt
+    {
+        public static void AutoRun<TObservable>(this TObservable observable, Action<TObservable> reaction)
+            where TObservable : ObservableObject
+        {
+            observable.m_store.AutoRun(() => reaction(observable));
+        }
+
+        public static void AutoRun(this ObservableObject observable, Action reaction)
+        {
+            observable.m_store.AutoRun(reaction);
         }
     }
 }

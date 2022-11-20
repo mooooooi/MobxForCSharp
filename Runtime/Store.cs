@@ -14,8 +14,9 @@ namespace Higo.Mobx
         internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new Dictionary<BitVector32, List<ReactionInfo>>();
         internal int m_fieldCount;
 
-        public ref T GetValue<T>(ref T field, in ParentInfo parentInfo)
+        public ref T GetValue<T>(ref ObservableValue<T> observable, ref T field)
         {
+            ref var parentInfo = ref observable.m_parentInfo;
             var dep = m_getterFlag[1 << parentInfo.ObjectId]
                 ? m_getterDeps[parentInfo.ObjectId] : default;
             m_getterFlag[1 << parentInfo.ObjectId] = true;
@@ -25,8 +26,9 @@ namespace Higo.Mobx
             return ref field;
         }
 
-        public void SetValue<T>(ref T field, in T newValue, in ParentInfo parentInfo)
+        public void SetValue<T>(ref ObservableValue<T> observable, ref T field, in T newValue)
         {
+            ref var parentInfo = ref observable.m_parentInfo;
             var dep = m_setterFlag[1 << parentInfo.ObjectId]
                 ? m_setterDeps[parentInfo.ObjectId]
                 : default;
@@ -62,7 +64,7 @@ namespace Higo.Mobx
                 m_reactions[m_getterFlag] = list = new List<ReactionInfo>();
             list.Add(reactionInfo);
 
-            m_getterFlag = previousGetterFlag; 
+            m_getterFlag = previousGetterFlag;
         }
 
         public ActionScope CreateActionScope() => new ActionScope(this);
@@ -78,12 +80,21 @@ namespace Higo.Mobx
             observable.init(this, in parentInfo);
         }
 
-        internal int getObjectId()
+        public int GetObjectId()
         {
             var ret = m_getterDeps.Count;
             m_getterDeps.Add(default);
             m_setterDeps.Add(default);
             return ret;
+        }
+
+        public static TObservable AsRoot<TObservable>()
+            where TObservable : ObservableObject, IObservableForStore, new()
+        {
+            var store = new Store();
+            var observable = new TObservable();
+            store.Bind(observable);
+            return observable;
         }
     }
 }
