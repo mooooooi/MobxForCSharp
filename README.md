@@ -29,8 +29,8 @@ public class Data : ObservableObject
     // 5. Implement OnBind.
     public override void OnBind()
     {
-        Bind(m_id);
-        Bind(m_name);
+        BindValue(m_id);
+        BindValue(m_name);
     }
 }
 ```
