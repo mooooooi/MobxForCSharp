@@ -1,5 +1,7 @@
 ﻿using Higo.Mobx;
 using System.Diagnostics;
+using UnityEngine;
+using NTest;
 
 public class PersonBaseInfo : ObservableObject
 {
@@ -84,6 +86,6 @@ public class Program
             }
         }
 
-        Console.WriteLine($"总耗时：{watch.Elapsed.TotalMilliseconds}");
+        UnityEngine.Debug.Log($"总耗时：{watch.Elapsed.TotalMilliseconds}");
     }
 }
