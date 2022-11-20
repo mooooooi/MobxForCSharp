@@ -1,82 +1,89 @@
-﻿// See https://aka.ms/new-console-template for more information
-using Higo.Mobx;
-using Higo.Mobx2;
+﻿using Higo.Mobx;
+using System.Diagnostics;
 
-public class State : Observable<State>
+public class PersonBaseInfo : ObservableObject
 {
-    ProxyValue<int> m_id;
+    ObservableValue<int> m_id;
     public int id
     {
         set => m_id.Value = value;
         get => m_id.Value;
     }
 
-    ProxyValue<string> m_name;
+    ObservableValue<string> m_name;
     public string name
     {
         set => m_name.Value = value;
         get => m_name.Value;
     }
 
-    public State()
+    public PersonBaseInfo(Store store)
     {
-        m_id = CreateValue(0);
-        m_name = CreateValue(string.Empty);
-    }
-}
-
-public class Data1 : ObservableObject
-{
-    public Data0 data0 = new Data0();
-
-    protected override void OnBind()
-    {
-        Bind(ref data0);
-    }
-}
-
-public class Data0 : ObservableObject
-{
-    ObservableValue<int> m_id;
-    public int Id
-    {
-        set => m_id.Value = value;
-        get => m_id.Value;
-    }
-
-    ObservableValue<string> m_name;
-    public string Name
-    {
-        set => m_name.Value = value;
-        get => m_name.Value;
-    }
-
-    protected override void OnBind()
-    {
+        store.Bind(this);
         Bind(ref m_id);
         Bind(ref m_name);
     }
 }
 
-public class Program
+public class PersonAgeInfo : ObservableObject
 {
-    public static void Main()
+    ObservableValue<float> m_age;
+    public float age
     {
-        var state = new State();
-
-        state.AutoRun(onReaction);
-
-        using (state.CreateActionScope())
-        {
-            state.name = "asdasd";
-            state.id = 123;
-        }
-
-        ObservableValue<int> a;
+        set => m_age.Value = value;
+        get => m_age.Value;
     }
 
-    private static void onReaction(State observable)
+    public PersonAgeInfo(Store store)
     {
-        Console.WriteLine(observable.id);
+        store.Bind(this);
+        Bind(ref m_age);
+    }
+}
+
+public class Program
+{
+    static PersonBaseInfo baseInfo;
+    static PersonAgeInfo ageInfo;
+    public static void Main()
+    {
+        var store = new Store();
+        baseInfo = new PersonBaseInfo(store);
+        ageInfo = new PersonAgeInfo(store);
+
+        var num1 = 300;
+        while (num1-- > 0)
+        {
+            store.AutoRun(() =>
+            {
+                _ = baseInfo.id;
+                _ = ageInfo.age;
+            });
+            store.AutoRun(() =>
+            {
+                _ = baseInfo.id;
+                _ = baseInfo.name;
+            });
+        }
+
+        var watch = new Stopwatch();
+        watch.Start();
+
+        var num = 10000;
+        while (num-- > 0)
+        {
+            using (store.CreateActionScope())
+            {
+                baseInfo.id = 123 + num;
+                baseInfo.name = "asdasd";
+            }
+
+            using (store.CreateActionScope())
+            {
+                ageInfo.age++;
+            }
+        }
+
+        Console.WriteLine($"总耗时：{watch.Elapsed.TotalMilliseconds}");
     }
 }
