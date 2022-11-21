@@ -22,18 +22,14 @@ namespace Higo.Mobx
                 if ((k.Data & flag.Data) != flag.Data) continue;
                 foreach (var info in v)
                 {
-                    var fail = false;
                     foreach (var c in info.Condition)
                     {
-                        if ((c.deps.Data & m_store.m_setterDeps[c.index].Data) != m_store.m_setterDeps[c.index].Data)
+                        if ((c.deps.Data & m_store.m_setterDeps[c.index].Data) > 0)
                         {
-                            fail = true;
+                            info.Action();
                             break;
                         }
-                    }
-                    if (!fail)
-                    {
-                        info.Action();
+
                     }
                 }
             }

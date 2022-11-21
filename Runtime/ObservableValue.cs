@@ -13,6 +13,8 @@
 
         public bool IsInitialized => m_store != null;
 
+        public IStore Store => m_store;
+
         void IObservableForStore.init(IStore store, in ParentInfo parentInfo)
         {
             m_store = store;

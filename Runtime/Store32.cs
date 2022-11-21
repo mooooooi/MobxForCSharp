@@ -7,12 +7,12 @@ namespace Higo.Mobx
 {
     public class Store32 : IStore
     {
-        internal List<BitVector32> m_getterDeps = new List<BitVector32>();
-        internal List<BitVector32> m_setterDeps = new List<BitVector32>();
+        internal List<BitVector32> m_getterDeps = new();
+        internal List<BitVector32> m_setterDeps = new();
         internal BitVector32 m_getterFlag;
         internal BitVector32 m_setterFlag;
 
-        internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new Dictionary<BitVector32, List<ReactionInfo>>();
+        internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new();
         internal int m_fieldCount;
 
         public ref T GetValue<T>(in ParentInfo parentInfo, ref T field)
@@ -69,7 +69,7 @@ namespace Higo.Mobx
             int num = 0;
             while (flagData > 0)
             {
-                if ((flagData & 0b1) > 0)
+                if ((flagData & 0b1) > 0 && m_getterDeps[num].Data > 0)
                     reactionInfo.Condition.Add((num, m_getterDeps[num]));
                 flagData >>= 1;
                 num++;
@@ -79,7 +79,7 @@ namespace Higo.Mobx
                 m_reactions[m_getterFlag] = list = new List<ReactionInfo>();
             list.Add(reactionInfo);
 
-            m_getterFlag = previousGetterFlag;
+            m_getterFlag = previousGetterFlag; 
         }
 
         public IDisposable CreateActionScope() => new ActionScope32(this);

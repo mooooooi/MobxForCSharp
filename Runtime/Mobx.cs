@@ -24,5 +24,6 @@ namespace Higo.Mobx
     public interface IObservable
     {
         public bool IsInitialized { get; }
+        public IStore Store { get; }
     }
 }

@@ -18,6 +18,8 @@ namespace Higo.Mobx
         public int Count => m_count;
         public bool IsReadOnly => false;
 
+        public IStore Store => m_store;
+
         public T this[int index]
         {
             get => m_store.GetValue(new ParentInfo() { ObjectId = m_objectId, FieldId = index }, ref m_items[index]);
@@ -34,9 +36,17 @@ namespace Higo.Mobx
 
         public IDisposable CreateActionScope() => m_store.CreateActionScope();
 
-        public IEnumerator<T> GetEnumerator() => new ArrayIEnumrator(this);
+        public IEnumerator<T> GetEnumerator()
+        {
+            m_store.CombineGetterFlag(m_objectId, (1 << 32) - 1);
+            return new ArrayIEnumrator(this);
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => new ArrayIEnumrator(this);
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            m_store.CombineGetterFlag(m_objectId, (1 << 32) - 1);
+            return new ArrayIEnumrator(this);
+        }
 
         public int IndexOf(T item)
         {
@@ -51,17 +61,35 @@ namespace Higo.Mobx
 
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            if (index >= m_count || index < 0 || m_count + 1 >= m_count) throw new IndexOutOfRangeException();
+            for (var i = m_count - 1; i >= index; i--)
+            {
+                m_items[i + 1] = m_items[i];
+            }
+            m_items[index] = item;
+            m_count++;
+            m_store.CombineSetterFlag(m_objectId, GetBetweenFlag(index, m_count));
         }
+
+        public static int GetBetweenFlag(int start, int end) => ((1 << end) - 1) - ((1 << start) - 1);
 
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            if (index >= m_count || index < 0) throw new IndexOutOfRangeException();
+            for (var i = index; i < m_items.Length - 1; i++)
+            {
+                m_items[i] = m_items[i + 1];
+            }
+            m_store.CombineSetterFlag(m_objectId, GetBetweenFlag(index, m_count));
+            m_count--;
         }
 
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            var index = IndexOf(item);
+            if (index < 0) return false;
+            RemoveAt(index);
+            return false;
         }
 
         public void Add(T item)
@@ -74,9 +102,9 @@ namespace Higo.Mobx
 
         public void Clear()
         {
+            m_store.CombineSetterFlag(m_objectId, (1 << m_count) - 1);
             m_count = 0;
             Array.Clear(m_items, 0, m_count);
-            m_store.CombineSetterFlag(m_objectId, (1 << m_count) - 1);
         }
 
         public bool Contains(T item)
@@ -105,10 +133,12 @@ namespace Higo.Mobx
         public void CopyTo(T[] array, int arrayIndex)
         {
             if (m_count - arrayIndex + 1 > array.Length) throw new IndexOutOfRangeException();
-            for (var i = arrayIndex; i < m_count; i++)
+            var len = Math.Min(array.Length, m_count);
+            for (var i = arrayIndex; i < len; i++)
             {
                 array[i - arrayIndex] = m_items[i];
             }
+            m_store.CombineGetterFlag(m_objectId, GetBetweenFlag(arrayIndex, len));
         }
 
         public struct ArrayIEnumrator : IEnumerator<T>
