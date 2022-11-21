@@ -38,13 +38,13 @@ namespace Higo.Mobx
 
         public IEnumerator<T> GetEnumerator()
         {
-            m_store.CombineGetterFlag(m_objectId, (1 << 32) - 1);
+            m_store.CombineGetterFlag(m_objectId, (1 << m_items.Length) - 1);
             return new ArrayIEnumrator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            m_store.CombineGetterFlag(m_objectId, (1 << 32) - 1);
+            m_store.CombineGetterFlag(m_objectId, (1 << m_items.Length) - 1);
             return new ArrayIEnumrator(this);
         }
 

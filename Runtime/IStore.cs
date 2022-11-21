@@ -13,5 +13,6 @@ namespace Higo.Mobx
         int GetObjectId();
         void CombineSetterFlag(int objectId, int flag);
         void CombineGetterFlag(int objectId, int flag);
+        int MaxFieldCount { get; }
     }
 }

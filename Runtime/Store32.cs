@@ -15,6 +15,8 @@ namespace Higo.Mobx
         internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new();
         internal int m_fieldCount;
 
+        public int MaxFieldCount => 32;
+
         public ref T GetValue<T>(in ParentInfo parentInfo, ref T field)
         {
             var dep = m_getterFlag[1 << parentInfo.ObjectId]
@@ -79,14 +81,14 @@ namespace Higo.Mobx
                 m_reactions[m_getterFlag] = list = new List<ReactionInfo>();
             list.Add(reactionInfo);
 
-            m_getterFlag = previousGetterFlag; 
+            m_getterFlag = previousGetterFlag;
         }
 
         public IDisposable CreateActionScope() => new ActionScope32(this);
 
         public void Bind<T>(in T observable) where T : IObservableForStore
         {
-            if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
+            if (m_fieldCount >= MaxFieldCount) throw new Exception($"max field count is {MaxFieldCount}!");
             var parentInfo = new ParentInfo()
             {
                 ObjectId = 0,

@@ -23,7 +23,7 @@ namespace Higo.Mobx
 
         protected void BindValue<T>(ref T observable) where T : struct, IObservableForStore
         {
-            if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
+            if (m_fieldCount >= m_store.MaxFieldCount) throw new Exception($"max field count is {m_store.MaxFieldCount}!");
             var parentInfo = new ParentInfo()
             {
                 ObjectId = m_objectId,
@@ -34,7 +34,7 @@ namespace Higo.Mobx
 
         protected void BindObject<T>(ref T observable) where T : IObservableForStore, new()
         {
-            if (m_fieldCount >= 32) throw new Exception("max field count is 32!");
+            if (m_fieldCount >= m_store.MaxFieldCount) throw new Exception($"max field count is {m_store.MaxFieldCount}!");
             if (observable == null)
                 observable = new T();
             var parentInfo = new ParentInfo()
