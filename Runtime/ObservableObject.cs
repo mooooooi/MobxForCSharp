@@ -53,7 +53,7 @@ namespace Higo.Mobx
         public static void AutoRun<TObservable>(this TObservable observable, Action<TObservable> reaction)
             where TObservable : IObservable
         {
-            observable.Store.AutoRun(() => reaction(observable));
+            observable.Store.AutoRun(() => reaction(observable));  
         }
 
         public static void AutoRun<TObservable>(this TObservable observable, Action reaction)
