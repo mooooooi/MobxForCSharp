@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
 
 namespace Higo.Mobx
 {
@@ -8,8 +9,8 @@ namespace Higo.Mobx
     {
         internal List<BitVector32> m_getterDeps = new();
         internal List<BitVector32> m_setterDeps = new();
-        internal BitVector32 m_getterFlag;
-        internal BitVector32 m_setterFlag;
+        internal BitVector32 m_getterFlag = new();
+        internal BitVector32 m_setterFlag = new();
 
         internal Dictionary<BitVector32, List<ReactionInfo>> m_reactions = new();
         internal int m_fieldCount;

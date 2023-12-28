@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Higo.Mobx.Test
+namespace Higo.Mobx.Tests
 {
     public class PersonBaseInfo : ObservableObject
     {
