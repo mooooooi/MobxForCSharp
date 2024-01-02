@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mobx.Core", "src\Mobx.Core\Mobx.Core.csproj", "{31D146B4-C739-4DD6-8BFF-7142B51F066E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mobx.OldCore", "src\Mobx.Core\Mobx.OldCore.csproj", "{31D146B4-C739-4DD6-8BFF-7142B51F066E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobx.Test", "test\Mobx.Test\Mobx.Test.csproj", "{74F9B3B9-64C9-4688-9B6B-0333F4AB59C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mobx.Test", "test\Mobx.Test\Mobx.Test.csproj", "{74F9B3B9-64C9-4688-9B6B-0333F4AB59C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mobx.Core", "Mobx.Core\Mobx.Core.csproj", "{B03D6612-3C41-443F-BBDB-D40929159CB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{74F9B3B9-64C9-4688-9B6B-0333F4AB59C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74F9B3B9-64C9-4688-9B6B-0333F4AB59C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74F9B3B9-64C9-4688-9B6B-0333F4AB59C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B03D6612-3C41-443F-BBDB-D40929159CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B03D6612-3C41-443F-BBDB-D40929159CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B03D6612-3C41-443F-BBDB-D40929159CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B03D6612-3C41-443F-BBDB-D40929159CB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
